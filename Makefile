@@ -13,7 +13,10 @@ clean:
 	rm -f $(O)/*
 	rm -f $(B)/*
 
-.PSEUDO: all clean
+astyle:
+	astyle --style=otbs --add-brackets --align-pointer=name  --keep-one-line-blocks *.[ch]
+
+.PSEUDO: all clean astyle
 
 #.SILENT:
 
