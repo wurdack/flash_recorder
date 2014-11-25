@@ -1,7 +1,8 @@
 #include "sys.h"
 #include "flash.h"
 
-int main(void) {
+int main(void)
+{
     sflash_init();
 
     // Stupid tests

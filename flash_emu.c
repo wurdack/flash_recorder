@@ -12,26 +12,31 @@ static uint8_t s_sflash_array[c_flash_size];
 /** Erase wear counter */
 static uint32_t s_sflash_wear[c_flash_size / c_flash_block_size];
 
-static bool sflash_is_aligned(uint32_t address) {
+static bool sflash_is_aligned(uint32_t address)
+{
     return (address & (c_flash_block_size - 1)) == 0;
 }
 
-static uint32_t sflash_align(uint32_t address) {
+static uint32_t sflash_align(uint32_t address)
+{
     return (address & ~(c_flash_block_size - 1));
 }
 
-static uint32_t sflash_block_from_address(uint32_t address) {
+static uint32_t sflash_block_from_address(uint32_t address)
+{
     ASSERT(address < c_flash_size);
     return address / c_flash_block_size;
 }
 
-int sflash_init(void) {
+int sflash_init(void)
+{
     memset(s_sflash_array, c_flash_erase_value, sizeof(s_sflash_array));
     memset(s_sflash_wear, 0, sizeof(s_sflash_wear));
     return 0;
 }
 
-int sflash_erase_block(uint32_t address) {
+int sflash_erase_block(uint32_t address)
+{
     ASSERT(sflash_is_aligned(address));
     address = sflash_align(address);
     memset(s_sflash_array + address, c_flash_erase_value, c_flash_block_size);
@@ -39,7 +44,8 @@ int sflash_erase_block(uint32_t address) {
     return 0;
 }
 
-int sflash_write(uint32_t address, void const* buffer, uint32_t size) {
+int sflash_write(uint32_t address, void const *buffer, uint32_t size)
+{
     ASSERT(address + size <= c_flash_size);
 
     // To simulate how flash behaves, AND each byte into memory. This will
@@ -47,7 +53,7 @@ int sflash_write(uint32_t address, void const* buffer, uint32_t size) {
     // N.B. This is only valid for flash that erases to 0xff. Could make this
     //      configurable, but it currently is not.
 
-    uint8_t const * b = (uint8_t const*)buffer;
+    uint8_t const *b = (uint8_t const *)buffer;
     uint32_t i;
 
     for (i = 0; i < size; ++i) {
@@ -58,7 +64,8 @@ int sflash_write(uint32_t address, void const* buffer, uint32_t size) {
     return 0;
 }
 
-int sflash_read(uint32_t address, void* buffer, uint32_t size) {
+int sflash_read(uint32_t address, void *buffer, uint32_t size)
+{
     ASSERT(address + size <= c_flash_size);
     memcpy(buffer, s_sflash_array + address, size);
     return 0;
