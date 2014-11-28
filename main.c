@@ -1,5 +1,42 @@
+#include <stdlib.h>
+
 #include "sys.h"
 #include "flash.h"
+#include "encode_decode.h"
+
+int test_encoder(void)
+{
+    uint8_t buffer[8];
+
+    uint32_t tests[] = {0, 0x50, 0x7f, 0x80, 0x400, 0x7ff, 0x800, 0x1234};
+    uint32_t i;
+    uint32_t j;
+    uint32_t length_in;
+    uint32_t length_out;
+
+    uint32_t encodee;
+    uint32_t decodee;
+
+    for (i = 0; i < sizeof(tests) / sizeof(tests[0]); ++i) {
+        encodee = tests[i];
+        length_in = utf_encode(encodee, buffer, sizeof(buffer));
+        ASSERT(length_in);
+        length_out = utf_decode(buffer, length_in, &decodee);
+        ASSERT(length_in == length_out);
+        ASSERT(encodee == decodee);
+    }
+
+    for (i = 0; i < 1000; ++i) {
+        encodee = rand() & 0x7fffffff;
+        length_in = utf_encode(encodee, buffer, sizeof(buffer));
+        ASSERT(length_in);
+        length_out = utf_decode(buffer, length_in, &decodee);
+        ASSERT(length_in == length_out);
+        ASSERT(encodee == decodee);
+    }
+
+    return 0;
+}
 
 int main(void)
 {
@@ -29,6 +66,10 @@ int main(void)
     for (i = 0; i < sizeof(buffer); ++i) {
         ASSERT(buffer[i] = 0xff);
     }
+
+    // encoder test
+    printf("4. utf-8 encoder/decoder\n");
+    test_encoder();
 
     printf("Passed.\n");
 }

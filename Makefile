@@ -29,6 +29,6 @@ $(O)/%.o: %.c
 	-mkdir -p $(O)
 	$(CC) $(CFLAGS) $(CDEFINES) -c $< -o $@
 
-$(B)/test_flash: $(O)/main.o $(O)/flash_emu.o
+$(B)/test_flash: $(O)/main.o $(O)/flash_emu.o $(O)/encode_decode.o
 	-mkdir -p $(B)
 	$(LD) $^ -o $@ -lc -macosx_version_min 10.8
