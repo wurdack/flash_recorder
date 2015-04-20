@@ -26,7 +26,7 @@ int test_encoder(void)
         ASSERT(encodee == decodee);
     }
 
-    for (i = 0; i < 1000; ++i) {
+    for (i = 0; i < 10000; ++i) {
         encodee = rand() & 0x7fffffff;
         length_in = utf_encode(encodee, buffer, sizeof(buffer));
         ASSERT(length_in);
